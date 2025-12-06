@@ -314,15 +314,14 @@ st.markdown(
     "</div>",
     unsafe_allow_html=True
 )
-st.markdown("<h1 class='centered animate-fadein'>MyKOA for Knee Osteoarthritis Classifier</h1>", unsafe_allow_html=True)
-st.markdown("<div class='centered animate-fadein'><h3>KL Grade Prediction with AI (U-Net + ResNet50)</h3></div>", unsafe_allow_html=True)
+st.markdown("<h1 class='centered animate-fadein'>Yuk periksa tingkat keparahan Osteoarthritis Lututmu dengan myKOA !</h1>", unsafe_allow_html=True)
+st.markdown("<div class='centered animate-fadein'><h3>Unggah gambar X-ray lutut anda!</h3></div>", unsafe_allow_html=True)
 st.markdown(
     """
     <div class='centered animate-fadein'>
     <small>
-    Upload citra X-ray lutut. <br/>
     Model AI ini akan mengklasifikasikan tingkat keparahan Osteoarthritis (KL Grade 0–4) berdasarkan gambar X-ray.<br/>
-    Dikembangkan untuk demo Tugas Akhir, riset, dan edukasi klinis oleh Yustinus Dwi Adyra.
+    Dikembangkan untuk demo Tugas Akhir dan riset di bidang Data Science dan Inteligent System (DSIS) oleh Yustinus Dwi Adyra.
     </small>
     </div>
     """,
