@@ -335,7 +335,7 @@ if uploaded_file is not None:
     st.markdown("<div class='card animate-fadein'>", unsafe_allow_html=True)
     file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
     img_array = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
-    st.image(img_array, caption="Gambar X-ray yang Diunggah", use_container_width=True)
+    st.image(img_array, caption="Gambar X-ray yang Diunggah")
 
     loader_placeholder = st.empty()
 
