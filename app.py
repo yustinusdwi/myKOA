@@ -337,6 +337,7 @@ if uploaded_file is not None:
     img_array = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
     st.image(img_array, caption="Gambar X-ray yang Diunggah", use_column_width=True)
 
+
     loader_placeholder = st.empty()
 
     with loader_placeholder.container():
