@@ -1,9 +1,9 @@
-streamlit
+streamlit==1.22.0
 
-tensorflow
+tensorflow==2.10.1
 numpy
 opencv
 matplotlib
 gdown
-protobuf
+protobuf==3.19.5
 h5py
