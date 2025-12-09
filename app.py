@@ -195,6 +195,24 @@ h1, h2, h3 {
     color: #9ca3af;
     pointer-events: none;
 }
+
+/* --- Tombol link ke contoh gambar (styling mirip tombol lain) --- */
+.gradient-link-btn {
+    display: inline-block;
+    background: linear-gradient(90deg, #52a2ff 0%, #7ddc92 100%);
+    color: #ffffff !important;
+    border-radius: 999px;
+    padding: 0.55rem 1.5rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none !important;
+    box-shadow: 0 3px 10px rgba(80, 132, 175, 0.25);
+    transition: 0.22s all ease-in-out;
+}
+.gradient-link-btn:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 6px 22px rgba(80, 132, 175, 0.35);
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -257,6 +275,9 @@ MODEL_PATH = os.path.join(MODEL_DIR, MODEL_FILENAME)
 # ID dari link Google Drive kamu:
 # https://drive.google.com/file/d/1PDVnIHf55rZr5Q2rIxSQE2Ba2tKxOrEb/view?usp=sharing
 MODEL_URL = "https://drive.google.com/uc?id=1PDVnIHf55rZr5Q2rIxSQE2Ba2tKxOrEb"
+
+# 🔗 Link Google Drive berisi contoh gambar X-ray (sudah diisi dari kamu)
+EXAMPLE_IMAGES_URL = "https://drive.google.com/drive/folders/15Q7tG3CuMR-GsPysYfA5o2wmny36F9yd?usp=sharing"
 
 
 def download_model_if_needed():
@@ -336,6 +357,18 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+# 🔘 Tombol ke contoh gambar X-ray (posisi strategis di dekat instruksi sebelum uploader)
+st.markdown(
+    f"""
+    <div class='centered animate-fadein' style='margin-top:0.8rem; margin-bottom:0.6rem;'>
+        <a href="{EXAMPLE_IMAGES_URL}" target="_blank" class="gradient-link-btn">
+            Lihat Contoh Gambar X-ray (Google Drive)
+        </a>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
 # ---- Upload Gambar
 uploaded_file = st.file_uploader("", type=['jpg','jpeg','png'], key="xray-uploader")
 
@@ -344,8 +377,6 @@ if uploaded_file is not None:
     file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
     img_array = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
     st.image(img_array, caption="Gambar X-ray yang Diunggah")
-
-
 
     loader_placeholder = st.empty()
 
@@ -376,7 +407,6 @@ if uploaded_file is not None:
 
     loader_placeholder.empty()
 
- 
     st.markdown(f"""
         <h3 class='centered animate-fadein'>Prediksi: 
         <span style='color:#2db6f8'>{LABELS[pred_class]}</span></h3>
@@ -398,7 +428,6 @@ if uploaded_file is not None:
     st.progress(float(np.max(probas)), text=f"Keyakinan Model: {int(np.max(probas)*100)}%")
     st.markdown("<hr/>", unsafe_allow_html=True)
     st.markdown("#### Probabilitas Tiap Kelas")
-
 
     fig, ax = plt.subplots()
     bars = ax.bar(LABELS, probas, color=['#2db6f8','#53e2b8','#7cc6fe','#ffe292','#ffaebc'])
@@ -469,11 +498,11 @@ with st.expander("📚 Referensi Ilmiah yang Digunakan di Aplikasi Ini"):
         <li>[16] N.-T. Do, S.-T. Jung, H.-J. Yang, and S.-H. Kim, “Multi-level Seg-UNet model with global and patch-based X-ray images for knee bone tumor detection,” <i>Diagnostics</i>, vol. 11, no. 4, p. 691, 2021.</li>
         <li>[17] S. Gornale and P. Patravali, “Digital Knee X-ray Images,” Mendeley Data, 2020. Available: https://data.mendeley.com/datasets/t9ndx37v5h/1</li>
         <li>[18] M. Cossio, “Augmenting medical imaging: A comprehensive catalogue of 65 techniques for enhanced data analysis,” arXiv:2303.01178, 2023.</li>
-        <li>[19] F. Khalvati, E. Kazmierski, and I. Diamant, “Effect of normalization methods on the predictive performance and reproducibility of radiomic features in brain MRI,” <i>Insights into Imaging</i>, vol. 15, no. 1, 2024.</li>
+        <li>[19] F. Khalvati, E. Kazmierski, dan I. Diamant, “Effect of normalization methods on the predictive performance and reproducibility of radiomic features in brain MRI,” <i>Insights into Imaging</i>, vol. 15, no. 1, 2024.</li>
         <li>[20] A. Younis et al., “Abnormal brain tumors classification using ResNet50 and its comprehensive evaluation,” <i>IEEE Access</i>, 2024.</li>
-        <li>[21] S. Aladhadh and R. Mahum, “Knee osteoarthritis detection using an improved CenterNet with pixel-wise voting scheme,” <i>IEEE Access</i>, vol. 11, pp. 22283–22296, 2023.</li>
-        <li>[22] S. S. Gornale, P. U. Patravali, and P. S. Hiremath, “Automatic detection and classification of knee osteoarthritis using Hu’s invariant moments,” <i>Frontiers in Robotics and AI</i>, vol. 7, p. 591827, 2020.</li>
-        <li>[23] A. Ghazwan, S. Al-Qazzaz, and A. A. Abdulmunem, “Radiographic imaging-based joint degradation detection using deep learning,” <i>International Journal of Advanced Technology and Engineering Exploration</i>, vol. 10, no. 108, pp. 1417–1430, 2023.</li>
+        <li>[21] S. Aladhadh dan R. Mahum, “Knee osteoarthritis detection using an improved CenterNet dengan pixel-wise voting scheme,” <i>IEEE Access</i>, vol. 11, pp. 22283–22296, 2023.</li>
+        <li>[22] S. S. Gornale, P. U. Patravali, dan P. S. Hiremath, “Automatic detection and classification of knee osteoarthritis using Hu’s invariant moments,” <i>Frontiers in Robotics and AI</i>, vol. 7, p. 591827, 2020.</li>
+        <li>[23] A. Ghazwan, S. Al-Qazzaz, dan A. A. Abdulmunem, “Radiographic imaging-based joint degradation detection using deep learning,” <i>International Journal of Advanced Technology and Engineering Exploration</i>, vol. 10, no. 108, pp. 1417–1430, 2023.</li>
         </ol>
         """,
         unsafe_allow_html=True
