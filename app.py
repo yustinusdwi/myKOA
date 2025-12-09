@@ -4,7 +4,9 @@ import tensorflow as tf
 import cv2
 import matplotlib.pyplot as plt
 import os
-import gdown  
+import gdown 
+import h5py
+import json
 # import time
 
 # --- Modern CSS Bootstrap-like ----
@@ -272,28 +274,54 @@ def download_model_if_needed():
 # ---- Load Model
 @st.cache_resource
 def load_model():
-    # Pastikan file model sudah ada (kalau belum, di-download dulu)
-    download_model_if_needed()
-
-    def focal_loss(gamma=2., alpha=0.25):
-        import tensorflow.keras.backend as K
-
+    # Definisi focal loss tetap seperti sebelumnya
+    def focal_loss(gamma=2.0, alpha=0.25):
         def loss(y_true, y_pred):
-            y_pred = K.clip(y_pred, K.epsilon(), 1. - K.epsilon())
+            y_true = tf.cast(y_true, tf.float32)
+            epsilon = K.epsilon()
+            y_pred = K.clip(y_pred, epsilon, 1.0 - epsilon)
             cross_entropy = -y_true * K.log(y_pred)
             weight = alpha * K.pow(1 - y_pred, gamma)
             loss = weight * cross_entropy
             return K.mean(K.sum(loss, axis=-1))
         return loss
 
-    model = tf.keras.models.load_model(
-        MODEL_PATH,  # ⬅️ sekarang baca dari file hasil download
-        custom_objects={'loss': focal_loss(), 'focal_loss': focal_loss()},
-        compile=False
+    # === 1. BACA & PATCH CONFIG MODEL DARI FILE .H5 (TANPA MENGUBAH FILE) ===
+    with h5py.File(MODEL_PATH, "r") as f:
+        model_config = f.attrs.get("model_config")
+        if model_config is None:
+            raise ValueError("File H5 tidak memiliki atribut 'model_config'.")
+
+        # model_config disimpan sebagai bytes → decode lalu parse JSON
+        model_config = json.loads(model_config.decode("utf-8"))
+
+    # Struktur: {"class_name": "Functional"/"Sequential", "config": {...}}
+    config = model_config.get("config", {})
+    layers = config.get("layers", [])
+
+    # Patch semua layer yang class_name-nya 'InputLayer'
+    for layer in layers:
+        if layer.get("class_name") == "InputLayer":
+            cfg = layer.get("config", {})
+            # Jika ada batch_shape tapi tidak ada batch_input_shape → rename
+            if "batch_shape" in cfg and "batch_input_shape" not in cfg:
+                cfg["batch_input_shape"] = cfg.pop("batch_shape")
+
+    # === 2. BANGUN ULANG MODEL DARI CONFIG YANG SUDAH DI-PATCH ===
+    model = tf.keras.models.model_from_config(
+        config,
+        custom_objects={
+            "loss": focal_loss(),
+            "focal_loss": focal_loss(),
+        },
     )
 
-    model.compile(optimizer='adam', loss=focal_loss(), metrics=["accuracy"])
+    # === 3. LOAD WEIGHTS DARI FILE .H5 ===
+    # Ini hanya baca weight, tidak mengubah file.
+    model.load_weights(MODEL_PATH)
+
     return model
+
 
 # ---- Fungsi Preprocessing Gambar
 def preprocess_image(img_array):
