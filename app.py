@@ -471,7 +471,29 @@ with st.expander("📚 Referensi Ilmiah yang Digunakan di Aplikasi Ini"):
     st.markdown(
         """
         <ol style="font-size:13px; text-align:justify;">
-        ... (daftar referensi kamu yang sama persis seperti sebelumnya) ...
+        <li>[1] J. D. Steinmetz et al., “Global, regional, and national burden of osteoarthritis, 1990–2020 and projections to 2050,” <i>The Lancet Rheumatology</i>, 2023.</li>
+        <li>[2] D. Mery, “X-ray testing by computer vision,” in <i>Proc. IEEE Conf. Computer Vision and Pattern Recognition Workshops</i>, 2013, pp. 360–367.</li>
+        <li>[3] D. Mery and C. Pieringer, <i>Computer Vision for X-Ray Testing</i>, Springer, 2021.</li>
+        <li>[4] A. Vashishtha and A. K. Acharya, “An overview of medical imaging techniques for knee osteoarthritis disease,” <i>Biomedical and Pharmacology Journal</i>, vol. 14, no. 2, 2021.</li>
+        <li>[5] J. H. Kellgren and J. S. Lawrence, “Radiological assessment of osteo-arthrosis,” <i>Annals of the Rheumatic Diseases</i>, vol. 16, no. 4, pp. 494–502, 1957.</li>
+        <li>[6] G. Litjens et al., “Deep learning in medical image analysis,” <i>Medical Image Analysis</i>, vol. 42, pp. 60–88, 2017.</li>
+        <li>[7] Y. Wang et al., “A ResNet-based approach for accurate radiographic diagnosis of knee osteoarthritis,” <i>CAAI Transactions on Intelligence Technology</i>, vol. 7, no. 3, pp. 512–521, 2022.</li>
+        <li>[8] M. S. Yallappa and G. R. Bharamagoudar, “Classification of knee X-ray images by severity of osteoarthritis using skip connection based ResNet101,” <i>International Journal of Intelligent Engineering &amp; Systems</i>, vol. 16, no. 5, 2023.</li>
+        <li>[9] T. Tariq, Z. Suhail, and Z. Nawaz, “Knee osteoarthritis detection and classification using X-rays,” <i>IEEE Access</i>, vol. 11, pp. 48292–48303, 2023.</li>
+        <li>[10] H. A. Ahmed and E. A. Mohammed, “Detection and classification of the osteoarthritis in knee joint using transfer learning with CNNs,” <i>Iraqi Journal of Science</i>, 2022.</li>
+        <li>[11] S. U. Rehman and V. Gruhn, “A sequential VGG16+CNN based automated approach with adaptive input for efficient detection of knee osteoarthritis stages,” <i>IEEE Access</i>, 2024.</li>
+        <li>[12] O. Ronneberger, P. Fischer, and T. Brox, “U-Net: Convolutional networks for biomedical image segmentation,” in <i>MICCAI 2015</i>, pp. 234–241.</li>
+        <li>[13] İ. Altun, S. Altun, and A. Alkan, “LSS-U-Net: Lumbar spinal stenosis semantic segmentation using deep learning,” <i>Multimedia Tools and Applications</i>, vol. 82, no. 26, 2023.</li>
+        <li>[14] L. Atika, S. Nurmaini, R. U. Partan, and E. Sukandi, “Image segmentation for mitral regurgitation with CNN based on U-Net, ResNet, V-Net, FractalNet and SegNet,” <i>Big Data and Cognitive Computing</i>, vol. 6, no. 4, p. 141, 2022.</li>
+        <li>[15] B. Liang, C. Tang, W. Zhang, M. Xu, and T. Wu, “N-Net: A U-Net architecture with dual encoder for medical image segmentation,” <i>Signal, Image and Video Processing</i>, vol. 17, no. 6, pp. 3073–3081, 2023.</li>
+        <li>[16] N.-T. Do, S.-T. Jung, H.-J. Yang, and S.-H. Kim, “Multi-level Seg-UNet model with global and patch-based X-ray images for knee bone tumor detection,” <i>Diagnostics</i>, vol. 11, no. 4, p. 691, 2021.</li>
+        <li>[17] S. Gornale and P. Patravali, “Digital Knee X-ray Images,” Mendeley Data, 2020. Available: https://data.mendeley.com/datasets/t9ndx37v5h/1</li>
+        <li>[18] M. Cossio, “Augmenting medical imaging: A comprehensive catalogue of 65 techniques for enhanced data analysis,” arXiv:2303.01178, 2023.</li>
+        <li>[19] F. Khalvati, E. Kazmierski, and I. Diamant, “Effect of normalization methods on the predictive performance and reproducibility of radiomic features in brain MRI,” <i>Insights into Imaging</i>, vol. 15, no. 1, 2024.</li>
+        <li>[20] A. Younis et al., “Abnormal brain tumors classification using ResNet50 and its comprehensive evaluation,” <i>IEEE Access</i>, 2024.</li>
+        <li>[21] S. Aladhadh and R. Mahum, “Knee osteoarthritis detection using an improved CenterNet with pixel-wise voting scheme,” <i>IEEE Access</i>, vol. 11, pp. 22283–22296, 2023.</li>
+        <li>[22] S. S. Gornale, P. U. Patravali, and P. S. Hiremath, “Automatic detection and classification of knee osteoarthritis using Hu’s invariant moments,” <i>Frontiers in Robotics and AI</i>, vol. 7, p. 591827, 2020.</li>
+        <li>[23] A. Ghazwan, S. Al-Qazzaz, and A. A. Abdulmunem, “Radiographic imaging-based joint degradation detection using deep learning,” <i>International Journal of Advanced Technology and Engineering Exploration</i>, vol. 10, no. 108, pp. 1417–1430, 2023.</li>
         </ol>
         """,
         unsafe_allow_html=True
