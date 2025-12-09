@@ -274,10 +274,9 @@ def download_model_if_needed():
 # ---- Load Model
 @st.cache_resource
 def load_model():
-    # Pastikan file model sudah ada (kalau belum, di-download dulu)
+    # Pastikan file model sudah ada (kalau belum, download dulu)
     download_model_if_needed()
 
-    # === Definisi focal loss (sama seperti saat training) ===
     import tensorflow.keras.backend as K
 
     def focal_loss(gamma=2.0, alpha=0.25):
@@ -289,54 +288,19 @@ def load_model():
             return K.mean(K.sum(loss_val, axis=-1))
         return loss
 
-    # === 1. BACA CONFIG DARI FILE H5 ===
-    with h5py.File(MODEL_PATH, "r") as f:
-        raw_cfg = f.attrs.get("model_config")
-        if raw_cfg is None:
-            raise ValueError("File H5 tidak memiliki atribut 'model_config'.")
-
-        # Bisa bytes / np.bytes_ / str → samakan jadi str
-        if not isinstance(raw_cfg, str):
-            raw_cfg = raw_cfg.decode("utf-8")
-
-        model_config = json.loads(raw_cfg)   # <-- struktur: {"class_name": "...", "config": {...}}
-
-    # === 2. PATCH InputLayer: batch_shape -> batch_input_shape ===
-    config = model_config.get("config", {})
-    layers = config.get("layers", [])
-
-    for layer in layers:
-        if layer.get("class_name") == "InputLayer":
-            cfg = layer.get("config", {})
-            if "batch_shape" in cfg and "batch_input_shape" not in cfg:
-                cfg["batch_input_shape"] = cfg.pop("batch_shape")
-
-    # (perlu juga patch di 'input_layers' kalau ada bentuk list-of-lists)
-    if "input_layers" in config:
-        # biasanya list seperti: [["input_layer_1", 0, 0]]
-        # tidak perlu diubah struktur, cukup biarkan
-
-        pass
-
-    # === 3. BANGUN MODEL DARI CONFIG YANG SUDAH DI-PATCH ===
-    # DI SINI YANG KEMARIN SALAH: sekarang kita kirim seluruh `model_config`,
-    # bukan hanya `config` bagian dalamnya.
-    model = tf.keras.models.model_from_config(
-        model_config,
+    # ⬇️ load H5 langsung, tidak perlu main-main dengan config manual
+    model = tf.keras.models.load_model(
+        MODEL_PATH,
         custom_objects={
             "loss": focal_loss(),
             "focal_loss": focal_loss(),
         },
+        compile=False,
     )
 
-    # === 4. LOAD WEIGHTS DARI FILE H5 ===
-    model.load_weights(MODEL_PATH)
-
-    # Opsional: compile lagi untuk dapat metric di .predict() tidak wajib,
-    # tapi aman saja:
     model.compile(optimizer="adam", loss=focal_loss(), metrics=["accuracy"])
-
     return model
+
 
 
 # ---- Fungsi Preprocessing Gambar
