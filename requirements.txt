@@ -1,9 +1,9 @@
 streamlit==1.22.0
 
 tensorflow==2.10.1
-numpy
-opencv
-matplotlib
-gdown
+numpy==1.23.5
+opencv-python-headless==4.7.0.72
+matplotlib==3.7.1
+gdown==5.2.0
 protobuf==3.19.5
-h5py
+h5py==3.8.0
