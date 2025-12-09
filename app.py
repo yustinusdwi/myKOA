@@ -274,7 +274,7 @@ def download_model_if_needed():
 # ---- Load Model
 @st.cache_resource
 def load_model():
-    # Definisi focal loss tetap seperti sebelumnya
+    # === focal loss seperti sebelumnya ===
     def focal_loss(gamma=2.0, alpha=0.25):
         def loss(y_true, y_pred):
             y_true = tf.cast(y_true, tf.float32)
@@ -282,8 +282,8 @@ def load_model():
             y_pred = K.clip(y_pred, epsilon, 1.0 - epsilon)
             cross_entropy = -y_true * K.log(y_pred)
             weight = alpha * K.pow(1 - y_pred, gamma)
-            loss = weight * cross_entropy
-            return K.mean(K.sum(loss, axis=-1))
+            loss_val = weight * cross_entropy
+            return K.mean(K.sum(loss_val, axis=-1))
         return loss
 
     # === 1. BACA & PATCH CONFIG MODEL DARI FILE .H5 (TANPA MENGUBAH FILE) ===
@@ -292,18 +292,21 @@ def load_model():
         if model_config is None:
             raise ValueError("File H5 tidak memiliki atribut 'model_config'.")
 
-        # model_config disimpan sebagai bytes → decode lalu parse JSON
-        model_config = json.loads(model_config.decode("utf-8"))
+        # Bisa berupa bytes ATAU string → normalisasi jadi string dulu
+        if not isinstance(model_config, str):
+            # biasanya bytes / np.bytes_
+            model_config = model_config.decode("utf-8")
 
-    # Struktur: {"class_name": "Functional"/"Sequential", "config": {...}}
+        model_config = json.loads(model_config)
+
+    # Struktur: {"class_name": ..., "config": {...}}
     config = model_config.get("config", {})
     layers = config.get("layers", [])
 
-    # Patch semua layer yang class_name-nya 'InputLayer'
+    # Patch semua InputLayer: batch_shape -> batch_input_shape
     for layer in layers:
         if layer.get("class_name") == "InputLayer":
             cfg = layer.get("config", {})
-            # Jika ada batch_shape tapi tidak ada batch_input_shape → rename
             if "batch_shape" in cfg and "batch_input_shape" not in cfg:
                 cfg["batch_input_shape"] = cfg.pop("batch_shape")
 
@@ -317,7 +320,6 @@ def load_model():
     )
 
     # === 3. LOAD WEIGHTS DARI FILE .H5 ===
-    # Ini hanya baca weight, tidak mengubah file.
     model.load_weights(MODEL_PATH)
 
     return model
