@@ -274,53 +274,67 @@ def download_model_if_needed():
 # ---- Load Model
 @st.cache_resource
 def load_model():
-    # === focal loss seperti sebelumnya ===
+    # Pastikan file model sudah ada (kalau belum, di-download dulu)
+    download_model_if_needed()
+
+    # === Definisi focal loss (sama seperti saat training) ===
+    import tensorflow.keras.backend as K
+
     def focal_loss(gamma=2.0, alpha=0.25):
         def loss(y_true, y_pred):
-            y_true = tf.cast(y_true, tf.float32)
-            epsilon = K.epsilon()
-            y_pred = K.clip(y_pred, epsilon, 1.0 - epsilon)
+            y_pred = K.clip(y_pred, K.epsilon(), 1.0 - K.epsilon())
             cross_entropy = -y_true * K.log(y_pred)
             weight = alpha * K.pow(1 - y_pred, gamma)
             loss_val = weight * cross_entropy
             return K.mean(K.sum(loss_val, axis=-1))
         return loss
 
-    # === 1. BACA & PATCH CONFIG MODEL DARI FILE .H5 (TANPA MENGUBAH FILE) ===
+    # === 1. BACA CONFIG DARI FILE H5 ===
     with h5py.File(MODEL_PATH, "r") as f:
-        model_config = f.attrs.get("model_config")
-        if model_config is None:
+        raw_cfg = f.attrs.get("model_config")
+        if raw_cfg is None:
             raise ValueError("File H5 tidak memiliki atribut 'model_config'.")
 
-        # Bisa berupa bytes ATAU string → normalisasi jadi string dulu
-        if not isinstance(model_config, str):
-            # biasanya bytes / np.bytes_
-            model_config = model_config.decode("utf-8")
+        # Bisa bytes / np.bytes_ / str → samakan jadi str
+        if not isinstance(raw_cfg, str):
+            raw_cfg = raw_cfg.decode("utf-8")
 
-        model_config = json.loads(model_config)
+        model_config = json.loads(raw_cfg)   # <-- struktur: {"class_name": "...", "config": {...}}
 
-    # Struktur: {"class_name": ..., "config": {...}}
+    # === 2. PATCH InputLayer: batch_shape -> batch_input_shape ===
     config = model_config.get("config", {})
     layers = config.get("layers", [])
 
-    # Patch semua InputLayer: batch_shape -> batch_input_shape
     for layer in layers:
         if layer.get("class_name") == "InputLayer":
             cfg = layer.get("config", {})
             if "batch_shape" in cfg and "batch_input_shape" not in cfg:
                 cfg["batch_input_shape"] = cfg.pop("batch_shape")
 
-    # === 2. BANGUN ULANG MODEL DARI CONFIG YANG SUDAH DI-PATCH ===
+    # (perlu juga patch di 'input_layers' kalau ada bentuk list-of-lists)
+    if "input_layers" in config:
+        # biasanya list seperti: [["input_layer_1", 0, 0]]
+        # tidak perlu diubah struktur, cukup biarkan
+
+        pass
+
+    # === 3. BANGUN MODEL DARI CONFIG YANG SUDAH DI-PATCH ===
+    # DI SINI YANG KEMARIN SALAH: sekarang kita kirim seluruh `model_config`,
+    # bukan hanya `config` bagian dalamnya.
     model = tf.keras.models.model_from_config(
-        config,
+        model_config,
         custom_objects={
             "loss": focal_loss(),
             "focal_loss": focal_loss(),
         },
     )
 
-    # === 3. LOAD WEIGHTS DARI FILE .H5 ===
+    # === 4. LOAD WEIGHTS DARI FILE H5 ===
     model.load_weights(MODEL_PATH)
+
+    # Opsional: compile lagi untuk dapat metric di .predict() tidak wajib,
+    # tapi aman saja:
+    model.compile(optimizer="adam", loss=focal_loss(), metrics=["accuracy"])
 
     return model
 
