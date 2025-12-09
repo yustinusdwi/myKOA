@@ -278,6 +278,8 @@ MODEL_URL = "https://drive.google.com/uc?id=1PDVnIHf55rZr5Q2rIxSQE2Ba2tKxOrEb"
 
 # 🔗 Link Google Drive berisi contoh gambar X-ray (sudah diisi dari kamu)
 EXAMPLE_IMAGES_URL = "https://drive.google.com/drive/folders/15Q7tG3CuMR-GsPysYfA5o2wmny36F9yd?usp=sharing"
+# 🔗 Link ke User Manual aplikasi myKOA
+USER_MANUAL_URL = "https://drive.google.com/drive/folders/1Zfuq-y8K1Cb4YhXp5JSBPb18j96ahwm8?usp=sharing"
 
 
 def download_model_if_needed():
