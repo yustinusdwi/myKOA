@@ -348,19 +348,23 @@ st.markdown(
 st.markdown("<h1 class='centered animate-fadein'>Yuk periksa tingkat keparahan Osteoarthritis Lututmu dengan myKOA !</h1>", unsafe_allow_html=True)
 st.markdown(
     f"""
-    <div class='centered animate-fadein' style='margin-top:0.8rem; margin-bottom:0.6rem;'>
+    <div class='centered animate-fadein' 
+         style='margin-top:0.8rem; margin-bottom:0.8rem; display:flex; 
+                flex-direction:row; gap:14px; justify-content:center; flex-wrap:wrap;'>
+
         <a href="{EXAMPLE_IMAGES_URL}" target="_blank" class="gradient-link-btn">
             Lihat Contoh Gambar X-ray
         </a>
-    </div>
-    <div class='centered animate-fadein' style='margin-top:0.5rem; margin-bottom:0.8rem;'>
+
         <a href="{USER_MANUAL_URL}" target="_blank" class="gradient-link-btn">
             Buka User Manual myKOA
         </a>
+
     </div>
     """,
     unsafe_allow_html=True
 )
+
 
 # st.markdown(
 #     f"""
