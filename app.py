@@ -364,7 +364,18 @@ st.markdown(
     f"""
     <div class='centered animate-fadein' style='margin-top:0.8rem; margin-bottom:0.6rem;'>
         <a href="{EXAMPLE_IMAGES_URL}" target="_blank" class="gradient-link-btn">
-            Lihat Contoh Gambar X-ray (Google Drive)
+            Lihat Contoh Gambar X-ray
+        </a>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+st.markdown(
+    f"""
+    <div class='centered animate-fadein' style='margin-top:0.5rem; margin-bottom:0.8rem;'>
+        <a href="{USER_MANUAL_URL}" target="_blank" class="gradient-link-btn">
+            Buka User Manual myKOA
         </a>
     </div>
     """,
