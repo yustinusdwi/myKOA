@@ -346,6 +346,28 @@ st.markdown(
     unsafe_allow_html=True
 )
 st.markdown("<h1 class='centered animate-fadein'>Yuk periksa tingkat keparahan Osteoarthritis Lututmu dengan myKOA !</h1>", unsafe_allow_html=True)
+st.markdown(
+    f"""
+    <div class='centered animate-fadein' style='margin-top:0.8rem; margin-bottom:0.6rem;'>
+        <a href="{EXAMPLE_IMAGES_URL}" target="_blank" class="gradient-link-btn">
+            Lihat Contoh Gambar X-ray
+        </a>
+    </div>
+    <div class='centered animate-fadein' style='margin-top:0.5rem; margin-bottom:0.8rem;'>
+        <a href="{USER_MANUAL_URL}" target="_blank" class="gradient-link-btn">
+            Buka User Manual myKOA
+        </a>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+# st.markdown(
+#     f"""
+    
+#     """,
+#     unsafe_allow_html=True
+# )
 st.markdown("<div class='centered animate-fadein'><h3>Unggah gambar X-ray lutut anda!</h3></div>", unsafe_allow_html=True)
 st.markdown(
     """
@@ -360,27 +382,6 @@ st.markdown(
 )
 
 # 🔘 Tombol ke contoh gambar X-ray (posisi strategis di dekat instruksi sebelum uploader)
-st.markdown(
-    f"""
-    <div class='centered animate-fadein' style='margin-top:0.8rem; margin-bottom:0.6rem;'>
-        <a href="{EXAMPLE_IMAGES_URL}" target="_blank" class="gradient-link-btn">
-            Lihat Contoh Gambar X-ray
-        </a>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
-
-st.markdown(
-    f"""
-    <div class='centered animate-fadein' style='margin-top:0.5rem; margin-bottom:0.8rem;'>
-        <a href="{USER_MANUAL_URL}" target="_blank" class="gradient-link-btn">
-            Buka User Manual myKOA
-        </a>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
 
 # ---- Upload Gambar
 uploaded_file = st.file_uploader("", type=['jpg','jpeg','png'], key="xray-uploader")
